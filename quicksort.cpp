@@ -46,7 +46,7 @@ int main()
 {
    int a[] = {1,88,96,15,2,18,3,5,8};
    
-   quicksort(a,0,9);
+   quicksort(a,0,8);
    
    
    for (int i = 0; i < 9; i++)

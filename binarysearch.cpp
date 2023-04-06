@@ -29,7 +29,7 @@ long long int binarys(long long int arr[], long long int l, long long int r, lon
 
 int main(int argc, char const *argv[])
 {
-   long long n = 10000000;
+   long long n = 100;
    long long int arr[n];
    long long int x;
 
@@ -40,12 +40,12 @@ int main(int argc, char const *argv[])
 
    clock_t t = clock();
 
-   x = binarys(arr, 0, n - 1, 600000);
+   x = binarys(arr, 0, n - 1, 11);
 
    t = clock() - t;
 
    double d = double(t) / CLOCKS_PER_SEC;
-
+   cout<<"index = "<<x; 
    cout << "time taken  = " << d << endl;
 
    return 0;
