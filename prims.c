@@ -1,61 +1,83 @@
-#include <stdio.h>    
-#include <limits.h>    
-#define vertices 5  /*Define the number of vertices in the graph*/  
-/* create minimum_key() method for finding the vertex that has minimum key-value and that is not added in MST yet */   
-int minimum_key(int k[], int mst[])    
-{  
-    int minimum  = INT_MAX, min,i;    
-      
-    /*iterate over all vertices to find the vertex with minimum key-value*/  
-    for (i = 0; i < vertices; i++)  
-        if (mst[i] == 0 && k[i] < minimum )   
-            minimum = k[i], min = i;    
-    return min;    
-}    
-/* create prim() method for constructing and printing the MST.  
-The g[vertices][vertices] is an adjacency matrix that defines the graph for MST.*/  
-void prim(int g[vertices][vertices])    
-{    
-    /* create array of size equal to total number of vertices for storing the MST*/  
-    int parent[vertices];    
-    /* create k[vertices] array for selecting an edge having minimum weight*/  
-    int k[vertices];       
-    int mst[vertices];      
-    int i, count,edge,v; /*Here 'v' is the vertex*/  
-    for (i = 0; i < vertices; i++)  
-    {  
-        k[i] = INT_MAX;  
-        mst[i] = 0;    
-    }  
-    k[0] = 0; /*It select as first vertex*/  
-    parent[0] = -1;   /* set first value of parent[] array to -1 to make it root of MST*/  
-    for (count = 0; count < vertices-1; count++)    
-    {    
-        /*select the vertex having minimum key and that is not added in the MST yet from the set of vertices*/  
-        edge = minimum_key(k, mst);    
-        mst[edge] = 1;    
-        for (v = 0; v < vertices; v++)    
-        {  
-            if (g[edge][v] && mst[v] == 0 && g[edge][v] <  k[v])    
-            {  
-                parent[v]  = edge, k[v] = g[edge][v];    
-            }  
-        }  
-     }    
-     /*Print the constructed Minimum spanning tree*/  
-     printf("\n Edge \t  Weight\n");  
-     for (i = 1; i < vertices; i++)    
-     printf(" %d <-> %d    %d \n", parent[i], i, g[i][parent[i]]);    
-      
-}    
-int main()    
-{    
-    int g[vertices][vertices] = {{0, 0, 3, 0, 0},    
-                                {0, 0, 10, 4, 0},    
-                                {3, 10, 0, 2, 6},    
-                                {0, 4, 2, 0, 1},    
-                                {0, 0, 6, 1, 0},    
-                                };   
-    prim(g);    
-    return 0;  
-}  
+// Prim's Algorithm in C
+
+#include <stdio.h>
+#include <stdbool.h>
+
+#define INF 9999999
+
+// number of vertices in graph
+#define V 5
+
+// create a 2d array of size 5x5
+// for adjacency matrix to represent graph
+int G[V][V] = {
+    {0, 9, 75, 0, 0},
+    {9, 0, 95, 19, 42},
+    {75, 95, 0, 51, 66},
+    {0, 19, 51, 0, 31},
+    {0, 42, 66, 31, 0}};
+
+int main()
+{
+    int no_edge; // number of edge
+
+    // create a array to track selected vertex
+    // selected will become true otherwise false
+    int selected[V];
+
+    // set selected false initially
+    memset(selected, false, sizeof(selected));
+
+    // set number of edge to 0
+    no_edge = 0;
+
+    // the number of egde in minimum spanning tree will be
+    // always less than (V -1), where V is number of vertices in
+    // graph
+
+    // choose 0th vertex and make it true
+    selected[0] = true;
+
+    int x; //  row number
+    int y; //  col number
+    int cost;
+    // print for edge and weight
+    printf("Edge : Weight\n");
+
+    while (no_edge < V - 1)
+    {
+        // For every vertex in the set S, find the all adjacent vertices
+        //  , calculate the distance from the vertex selected at step 1.
+        //  if the vertex is already in the set S, discard it otherwise
+        // choose another vertex nearest to selected vertex  at step 1.
+
+        int min = INF;
+        x = 0;
+        y = 0;
+
+        for (int i = 0; i < V; i++)
+        {
+            if (selected[i])
+            {
+                for (int j = 0; j < V; j++)
+                {
+                    if (!selected[j] && G[i][j])
+                    { // not in selected and there is an edge
+                        if (min > G[i][j])
+                        {
+                            min = G[i][j];
+                            x = i;
+                            y = j;
+                        }
+                    }
+                }
+            }
+        }
+        printf("%d - %d : %d\n", x, y, G[x][y]);
+        selected[y] = true;
+        no_edge++;
+        cost  = cost + G[x][y];
+    }
+
+    return 0;
+}
